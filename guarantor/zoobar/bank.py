@@ -38,3 +38,6 @@ def get_log(username):
     return db.query(Transfer).filter(or_(Transfer.sender==username,
                                          Transfer.recipient==username))
 
+
+    
+
