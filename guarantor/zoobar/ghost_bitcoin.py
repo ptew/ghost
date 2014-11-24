@@ -10,9 +10,11 @@ import hashlib
 import bitcoin
 import ghost_blockchain
 import bitcoin.rpc
+from bitcoin.core import *
+from bitcoin.core.script import *
 from bitcoin import SelectParams
-from bitcoin.core import b2x, b2lx, lx, COIN, COutPoint, CMutableTxOut, CMutableTxIn, CMutableTransaction, Hash160
-from bitcoin.core.script import CScript, OP_DUP, OP_HASH160, OP_EQUALVERIFY, OP_CHECKSIG, SignatureHash, SIGHASH_ALL
+# from bitcoin.core import b2x, b2lx, lx, CTxIn, COIN, MAX_MONEY, COutPoint, CMutableTxOut, CMutableTxIn, CMutableTransaction, Hash160
+# from bitcoin.core.script import CScript, OP_DUP, OP_HASH160, OP_RETURN, OP_EQUALVERIFY, OP_CHECKSIG, SignatureHash, SIGHASH_ALL
 from bitcoin.core.scripteval import VerifyScript, SCRIPT_VERIFY_P2SH
 from bitcoin.wallet import CBitcoinAddress, CBitcoinSecret
 
@@ -29,10 +31,11 @@ def send_bitcoins():
 	txins = [CTxIn(unspent[-1]['outpoint'])]
 	value_in = unspent[-1]['amount']
 	change_addr = proxy.getnewaddress()
+	print(change_addr)
 	change_pubkey = proxy.validateaddress(change_addr)['pubkey']
 	change_out = CMutableTxOut(MAX_MONEY, CScript([change_pubkey, OP_CHECKSIG]))
 
-	digest_outs = [CMutableTxOut(0, CScript([script.OP_RETURN, digest]))]
+	digest_outs = [CMutableTxOut(0, CScript([OP_RETURN, digest]))]
 
 	txouts = [change_out] + digest_outs
 
@@ -64,7 +67,7 @@ def transfer(address):
 	# transaction hashes are shown little-endian rather than the usual big-endian.
 	# There's also a corresponding x() convenience function that takes big-endian
 	# hex and converts it to bytes.
-	txid = lx('45a3096d7c5f741f70651d5a121f0f869699fe5db5cb957ccfef8e6f08f992cb')
+	txid = lx('8e4734d1349cea9c9c4e2a9e201c7dfd833dea89f13d26535e3052d35ad5974a')
 	vout = 0
 
 	# Create the txin structure, which includes the outpoint. The scriptSig
@@ -113,14 +116,15 @@ def transfer(address):
 def unspent():
 	proxy = bitcoin.rpc.Proxy()
 
-	unspent = proxy.listunspent(addrs=['mqi1Cau8A8u24U7LBRkYvJJhN1PyQWh2Jm'])
+	unspent = proxy.listunspent()
 	print(unspent)
 
 # transfer('msj42CCGruhRsFrGATiUuh25dtxYtnpbTx')
-transfer('mqi1Cau8A8u24U7LBRkYvJJhN1PyQWh2Jm')
-print(unspent())
+# print(unspent())
+# transfer('mrSTZyMJrX3KokBpH7FM2ircXiiosDXH2W')
 
 
-# send_bitcoins()
+
+send_bitcoins()
 
 # import hashlib
