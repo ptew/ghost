@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 
-import blockchain.createwallet
-import blockchain.pushtx
+from blockchain import pushtx, createwallet
+from blockchain.wallet import *
 
 API_CODE='a44bf714-158d-4374-95db-0b7b3d5f5194'
+GHOST_BLOCKCHAIN_ADDRESS = '183uPVwF3V9JHy86hXen9FkkLvXU164BmQ'
+
 
 def create_wallet(password,api_code,private_key=None,label=None,email=None):
 	# 	  URL: https://blockchain.info/api/v2/create_wallet
@@ -29,5 +31,20 @@ def create_wallet(password,api_code,private_key=None,label=None,email=None):
 
 def push_to_blockchain(hex_transaction):
 	blockchain.pushtx.pushtx(hex_transaction)
+
+
+def send_bitcoins(wallet_obj,recipient, amount, from_address=None, fee=None, note=None):
+	# 	"""Send bitcoin from your wallet to a single address.
+	# 	:param str to: recipient bitcoin address
+	# 	:param int amount: amount to send (in satoshi)
+	# 	:param str from_address: specific address to send from (optional)
+	# 	:param int fee: transaction fee in satoshi. Must be greater than the default
+	# 	fee (optional).
+	# 	:param str note: public note to include with the transaction (optional)
+	# 	:return: an instance of :class:`PaymentResponse` class
+	# 	"""
+	return wallet_obj.send(recipient,amount,from_address,fee,note)
+
+
 
 # create_wallet("iShJS1kf9o7RwkHjTAzh",API_CODE)
