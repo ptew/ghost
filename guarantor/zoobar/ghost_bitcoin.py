@@ -28,7 +28,7 @@ def send_bitcoins():
 
 	unspent = sorted(proxy.listunspent(0), key=lambda x: hash(x['amount']))
 
-	txins = [CTxIn(unspent[-1]['outpoint'])]
+	txin = [CTxIn(unspent[-1]['outpoint'])][0]
 	value_in = unspent[-1]['amount']
 	change_addr = proxy.getnewaddress()
 	print(change_addr)
@@ -38,9 +38,8 @@ def send_bitcoins():
 	digest_outs = [CMutableTxOut(0, CScript([OP_RETURN, digest]))]
 
 	txouts = [change_out] + digest_outs
-
-	tx = CMutableTransaction(txins, txouts)
-
+	txout = CMutableTxOut(0.001*COIN, CBitcoinAddress(address).to_scriptPubKey())
+tx = CMutableTransaction(txin, txout)
 	print(tx)
 
 	FEE_PER_BYTE = 0.00025*COIN/1000
