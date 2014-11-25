@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 from blockchain import pushtx, createwallet
 from blockchain.wallet import *
@@ -33,7 +33,7 @@ def push_to_blockchain(hex_transaction):
 	blockchain.pushtx.pushtx(hex_transaction)
 
 
-def send_bitcoins(wallet_obj,recipient, amount, from_address=None, fee=None, note=None):
+def send_bitcoins(identifier,password,recipient, amount, from_address=None, fee=None, note=None):
 	# 	"""Send bitcoin from your wallet to a single address.
 	# 	:param str to: recipient bitcoin address
 	# 	:param int amount: amount to send (in satoshi)
@@ -43,8 +43,23 @@ def send_bitcoins(wallet_obj,recipient, amount, from_address=None, fee=None, not
 	# 	:param str note: public note to include with the transaction (optional)
 	# 	:return: an instance of :class:`PaymentResponse` class
 	# 	"""
-	return wallet_obj.send(recipient,amount,from_address,fee,note)
+	wallet = Wallet(identifier, password)
+	payment = wallet.send(recipient,amount,from_address,fee,note)
+	print(payment.tx_hash)
+	return payment
+
+def get_identifier():
+	return "2114b8e2-dc72-496e-acab-7c381eb78cf1"
+
+def get_password():
+	return ">*%*izFun()!@"
+
+def make_transaction(merchant_address, amount):
+	identifier = get_identifier()
+	password = get_password()
+
+	return send_bitcoins(identifier,password,merchant_address,amount)
 
 
-
+# send_bitcoins('33f86204-4ded-4aa9-a5ea-c16adffff220',-----------,'16iPfs3YruFEEkriwe57qHJ8VpkSRFYDKp',66408,note="TEST -- PARKER")
 # create_wallet("iShJS1kf9o7RwkHjTAzh",API_CODE)

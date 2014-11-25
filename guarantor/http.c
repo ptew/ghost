@@ -61,7 +61,7 @@ int http_read_line(int fd, char *buf, size_t size)
     return -1;
 }
 
-const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len)
+const char *http_request_line(int fd, char *reqpath, char *env, size_t env_size, size_t *env_len)
 {
     static char buf[8192];      /* static variables are not on the stack */
     char *sp1, *sp2, *qp, *envp = env;
@@ -91,22 +91,22 @@ const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len)
     if (strcmp(buf, "GET") && strcmp(buf, "POST"))
         return "Unsupported request (not GET or POST)";
 
-    envp += sprintf(envp, "REQUEST_METHOD=%s", buf) + 1;
-    envp += sprintf(envp, "SERVER_PROTOCOL=%s", sp2) + 1;
+    envp += snprintf(envp, env_size - (size_t)(envp - env) - 1, "REQUEST_METHOD=%s", buf) + 1;
+    envp += snprintf(envp, env_size - (size_t)(envp - env) - 1, "SERVER_PROTOCOL=%s", sp2) + 1;
 
     /* parse out query string, e.g. "foo.py?user=bob" */
     if ((qp = strchr(sp1, '?')))
     {
         *qp = '\0';
-        envp += sprintf(envp, "QUERY_STRING=%s", qp + 1) + 1;
+        envp += snprintf(envp, env_size - (size_t)(envp - env) - 1, "QUERY_STRING=%s", qp + 1) + 1;
     }
 
     /* decode URL escape sequences in the requested path into reqpath */
     url_decode(reqpath, sp1);
 
-    envp += sprintf(envp, "REQUEST_URI=%s", reqpath) + 1;
+    envp += snprintf(envp, env_size - (size_t)(envp - env) - 1, "REQUEST_URI=%s", reqpath) + 1;
 
-    envp += sprintf(envp, "SERVER_NAME=zoobar.org") + 1;
+    envp += snprintf(envp, env_size - (size_t)(envp - env) - 1, "SERVER_NAME=zoobar.org") + 1;
 
     *envp = 0;
     *env_len = envp - env + 1;
@@ -279,7 +279,9 @@ void http_serve(int fd, const char *name)
     getcwd(pn, sizeof(pn));
     setenv("DOCUMENT_ROOT", pn, 1);
 
-    strcat(pn, name);
+    strncat(pn, name, 1024-strlen(pn)-1);
+    pn[1023] = '\0';
+
     split_path(pn);
 
     if (!stat(pn, &st))
@@ -340,11 +342,12 @@ void http_serve_file(int fd, const char *pn)
     close(filefd);
 }
 
-void dir_join(char *dst, const char *dirname, const char *filename) {
-    strcpy(dst, dirname);
+void dir_join(char *dst, size_t dst_size, const char *dirname, const char *filename) {
+    strncpy(dst, dirname, dst_size-1);
+    dst[dst_size-1] = '\0';
     if (dst[strlen(dst) - 1] != '/')
-        strcat(dst, "/");
-    strcat(dst, filename);
+        strncat(dst, "/", dst_size - strlen(dst) - 1);
+    strncat(dst, filename, dst_size - strlen(dst) - 1);
 }
 
 void http_serve_directory(int fd, const char *pn) {
@@ -355,9 +358,9 @@ void http_serve_directory(int fd, const char *pn) {
     int i;
 
     for (i = 0; indices[i]; i++) {
-        dir_join(name, pn, indices[i]);
+        dir_join(name, sizeof(name), pn, indices[i]);
         if (stat(name, &st) == 0 && S_ISREG(st.st_mode)) {
-            dir_join(name, getenv("SCRIPT_NAME"), indices[i]);
+            dir_join(name, sizeof(name), getenv("SCRIPT_NAME"), indices[i]);
             break;
         }
     }
@@ -438,6 +441,7 @@ void url_decode(char *dst, const char *src)
 {
     for (;;)
     {
+
         if (src[0] == '%' && src[1] && src[2])
         {
             char hexbuf[3];

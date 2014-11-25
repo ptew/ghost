@@ -6,6 +6,7 @@ import login
 import index
 import users
 import transfer
+import echo
 import zoobarjs
 import zoodb
 from debug import catch_err

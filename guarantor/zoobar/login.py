@@ -3,8 +3,8 @@ from functools import wraps
 from debug import *
 from zoodb import *
 
-import auth
-import bank
+import auth_client as auth
+import bank_client as bank
 import random
 
 class User(object):

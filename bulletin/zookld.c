@@ -144,14 +144,23 @@ pid_t launch_svc(CONF *conf, const char *name)
                     break;
     }
 
+    if ((dir = NCONF_get_string(conf, name, "dir")))
+    {
+        /* chroot into dir */
+        chroot(dir);
+        chdir("/");
+    }
+
     if (NCONF_get_number_e(conf, name, "uid", &uid))
     {
+        setresuid(uid, uid, uid);
         /* change real, effective, and saved uid to uid */
         warnx("setuid %ld", uid);
     }
 
     if (NCONF_get_number_e(conf, name, "gid", &gid))
     {
+        setresgid(gid, gid, gid);
         /* change real, effective, and saved gid to gid */
         warnx("setgid %ld", gid);
     }
@@ -161,13 +170,9 @@ pid_t launch_svc(CONF *conf, const char *name)
         ngids = 0;
         CONF_parse_list(groups, ',', 1, &group_parse_cb, NULL);
         /* set the grouplist to gids */
+        setgroups(ngids, gids);
         for (i = 0; i < ngids; i++)
             warnx("extra gid %d", gids[i]);
-    }
-
-    if ((dir = NCONF_get_string(conf, name, "dir")))
-    {
-        /* chroot into dir */
     }
 
     signal(SIGCHLD, SIG_DFL);
