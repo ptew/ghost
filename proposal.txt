@@ -1,0 +1,59 @@
+TechBits Project Proposal
+Group Members: 
+* Ada Taylor (adat)
+* Brendan Chang (bschang)
+* Erica Du (ericadu)
+* Parker Tew (ptew)
+
+
+Abstract
+
+
+Bitcoin, while originally designed for digital spaces, is gaining enough mainstream popularity to be making the jump to the physical world. In the physical world, attackers can potentially have access to location of transactions, repeated interaction with targets, and weakened guarantees of user compliance with best-practices in the name of convenience (infrequent changing of wallets, less usage of middlemen or tumblers on a frequent basis, etc). Transactions also may occur on a more ad-hoc basis, and it may be difficult to impossible to wait for the block chain to stabilize before completing physical transactions.
+
+
+We would like to implement a guarantor system. This system would act as a middle layer between customers and merchants, allowing anonymity and assuring merchants that they will be paid for their services. We designed this system to allow for a wide variety of guarantors, from credit and debit systems to more trusting models that might be appropriate for small living groups.
+
+
+The Problem
+
+
+Bitcoin, while originally designed for digital space, has several disadvantages and weakened guarantees when used as a PoS system and in the physical world. Among these is that the delay required to reliably add transactions to the block chain is about 10 minutes, which is often impractical in a physical sales environment, and can lead to double-spending if a malicious customer completes multiple transactions before the block chain stabilizes.
+
+
+Additionally, customers can easily leave a transaction trail to their primary wallet, from which data about their spending patterns, and thus travel habits and other personal information can be deduced. General solutions such as bitcoin tumblers only add to the potential time delay, and are difficult for the average customer to adopt on a day to day basis for transactions.
+
+
+Proposed Solution
+
+
+To solve this problem, we propose a guarantor system. Normally, a customer A would send Bitcoins directly to a merchant C, which means that C would both learn an identity of A and potential trail to their other wallets, and have to wait around 10 minutes for the transaction to be added to the block chain. In our new system, we introduce a guarantor B. 
+
+
+When making a transaction, A will now pass to C a signed “check” from B. C can immediately present this to B and find out if B can provide this amount of money on the behalf of A (while still not revealing A’s identity), solving our problems of lag time and double-spending. B can actually transfer the Bitcoin requested to C at their convenience (B is a known quantity, so C trusts them to follow through on their commitments).
+
+
+The mechanism that B uses to validate checks can be determined by B. One example would be a debit type scheme, where A transmits money to B in preparation for future purchases backed by B. Another would be a credit system, where B retains a small amount of information about each A for billing purposes, and allows them to spend and then pay afterwards. A third possibility would be payments with a slight percentage paid to cover future overcharges and fraud.
+
+
+We also might imagine making a guarantor tree where more central guarantors might accept payments from less trusted guarantors. To further preserve their anonymity, smaller groups of more privacy-savvy people who trust each other to a greater degree might form their own guarantor, assuring that their information is never directly shared with an entity outside of their control. 
+
+
+Regardless of which of these options is chosen, the privacy of A is now protected because their transactions are masked by the transactions of other users through the guarantor service, though still vulnerable to statistical attacks to varying degrees. All of these options also present the same interface to the merchant, who only has to choose the list of preapproved guarantors it accepts.
+
+
+Our end product would be to create a guarantor service, and demonstrate customer and merchant usage so that this system could potentially be adopted by the wider community.
+
+
+Design and Implementation
+
+
+The primary components of this project are:
+* A sample guarantor service
+* A description of the protocols
+* A sample app for customers
+* A sample app for merchants
+* A mechanic for maintaining a list of trustworthy guarantors
+
+
+        The guarantor service receives money from clients, and gives them a number of signing keys that allow them to write “checks” approved by that guarantor. At the Point of Sales the customer will then write a check for the amount that the merchant requires. This check does not identify the customer to the merchant, but it does identify them to the guarantor that issued them. The merchant can then quickly verify with the guarantor if the check is valid. If the check is valid, then the merchant may cash it, eventually causing the guarantor to pay the merchant via BitCoin. The merchant explicitly trusts a whitelist of guarantors to pay at a later date. If the check is not valid, either because the signing key was spoofed or because the customer is somehow breaking their contract with the guarantor by issuing the check, then it will be rejected almost immediately, allowing the merchant to seek alternate payment.
