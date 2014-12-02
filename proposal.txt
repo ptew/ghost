@@ -27,10 +27,10 @@ Additionally, customers can easily leave a transaction trail to their primary wa
 Proposed Solution
 
 
-To solve this problem, we propose a guarantor system. Normally, a customer A would send Bitcoins directly to a merchant C, which means that C would both learn an identity of A and potential trail to their other wallets, and have to wait around 10 minutes for the transaction to be added to the block chain. In our new system, we introduce a guarantor B. 
+To solve this problem, we propose a guarantor system. Normally, a customer A would send Bitcoins directly to a merchant C, which means that C would both learn an identity of A and potential trail to their other wallets, and have to wait around 10 minutes for the transaction to be added to the block chain. In our new system, we introduce a guarantor B.
 
 
-When making a transaction, A will now pass to C a signed “check” from B. C can immediately present this to B and find out if B can provide this amount of money on the behalf of A (while still not revealing A’s identity), solving our problems of lag time and double-spending. B can actually transfer the Bitcoin requested to C at their convenience (B is a known quantity, so C trusts them to follow through on their commitments).
+When making a transaction, A will now pass to C a signed “check” from B. C can immediately present this to B and find out if B can provide this amount of money on the behalf of A (while still not revealing A’s identity), solving our problems of lag time and double-spending. B can actually transfer the Bitcoin requested to C at their convenience (B is a known quantity, so C trusts them to follow through on their commitments). It is important to note that the encryption algorithm chosen should not allow checks to be associated with each other by author.
 
 
 The mechanism that B uses to validate checks can be determined by B. One example would be a debit type scheme, where A transmits money to B in preparation for future purchases backed by B. Another would be a credit system, where B retains a small amount of information about each A for billing purposes, and allows them to spend and then pay afterwards. A third possibility would be payments with a slight percentage paid to cover future overcharges and fraud.
@@ -39,7 +39,13 @@ The mechanism that B uses to validate checks can be determined by B. One example
 We also might imagine making a guarantor tree where more central guarantors might accept payments from less trusted guarantors. To further preserve their anonymity, smaller groups of more privacy-savvy people who trust each other to a greater degree might form their own guarantor, assuring that their information is never directly shared with an entity outside of their control. 
 
 
-Regardless of which of these options is chosen, the privacy of A is now protected because their transactions are masked by the transactions of other users through the guarantor service, though still vulnerable to statistical attacks to varying degrees. All of these options also present the same interface to the merchant, who only has to choose the list of preapproved guarantors it accepts.
+We can also construct this system such that the customer never directly interacts with the merchant. The merchant displays information to the customer, such as the amount owed and the address of the merchant. The customer then files a check with the guarantor, who becomes responsible for both paying the debt, and notifying the merchant of the payment of the debt by the client. Note that in a system where many people are using the same guarantor, it is possible for multiple to be transacting with the same merchant, therefore further secure identification of which incoming payment belongs to which customer is required, in addition to addressing the 10 minute delay.
+
+
+We feel it would be a strong obstacle to adoption and continued upkeep to require each merchant to provide a server for receiving incoming invoices. Therefore, we propose a “bulletin board” of sorts. A merchant now provides information on which bulletin they support and trust, and thus observe, in addition to their address, amount owed, and a unique id for the transaction. The guarantor will post a signed message to the bulletin indicating the unique id, timestamp, and indication of approval or denial. The merchant then can poll the bulletin for a receipt of incoming payment, or a lack of funds or similar. Addressing lack of receipt after a given time interval is at the merchant’s discretion. The incentive for providing a bulletin service would likely be a percentage of transactions, which would ensure such could be provided, or could be hosted by the guarantor if they chose though this is not necessary.
+
+
+Regardless of which of these options is chosen, the privacy of A is now protected because their transactions are masked by the transactions of other users through the guarantor service, though still vulnerable to statistical attacks to varying degrees. All of these options also present the same interface to the merchant, who only has to choose the list of preapproved guarantors it accepts. With our added bulletin board, the customer never directly interacts with the merchant, which makes it more difficult to gain any information on the customer. 
 
 
 Our end product would be to create a guarantor service, and demonstrate customer and merchant usage so that this system could potentially be adopted by the wider community.
