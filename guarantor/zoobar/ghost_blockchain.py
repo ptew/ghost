@@ -48,6 +48,18 @@ def send_bitcoins(identifier,password,recipient, amount, from_address=None, fee=
 	print(payment.tx_hash)
 	return payment
 
+def get_identifier():
+	return "2114b8e2-dc72-496e-acab-7c381eb78cf1"
+
+def get_password():
+	return ">*%*izFun()!@"
+
+def make_transaction(merchant_address, amount):
+	identifier = get_identifier()
+	password = get_password()
+
+	return send_bitcoins(identifier,password,merchant_address,amount)
+
 
 # send_bitcoins('33f86204-4ded-4aa9-a5ea-c16adffff220',-----------,'16iPfs3YruFEEkriwe57qHJ8VpkSRFYDKp',66408,note="TEST -- PARKER")
 # create_wallet("iShJS1kf9o7RwkHjTAzh",API_CODE)
