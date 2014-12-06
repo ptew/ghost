@@ -4,7 +4,7 @@ from login import requirelogin
 from zoodb import *
 from debug import *
 from profile import *
-import bank
+import bank_client as bank
 
 @catch_err
 @requirelogin

@@ -8,7 +8,7 @@
 /** Read the request line like "GET /xxx HTTP/1.0".
  *  \return Error message, or NULL if succeed.
  */
-const char *http_request_line(int fd, char *reqpath, char *env, size_t *env_len);
+const char *http_request_line(int fd, char *reqpath, char *env, size_t env_size, size_t *env_len);
 
 /** Read all HTTP request headers.
  *  \return Error message, or NULL if succeed.
