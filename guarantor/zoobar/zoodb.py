@@ -1,3 +1,5 @@
+# TODO: remove Transfer and Bank databases
+
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import *
@@ -32,6 +34,7 @@ class Wallet(WalletBase):
     wallet_address = Column(String(128), primary_key=True)
     wallet_creds = Column(String(128))
     bank_id = Column(String(128))
+    balance = Column(Integer, nullable=False, default=0)
 
 def dbsetup(name, base):
     thisdir = os.path.dirname(os.path.abspath(__file__))
