@@ -57,7 +57,6 @@ mkdir -p /jail/usr/share/zoneinfo
 cp -r /usr/share/zoneinfo/America /jail/usr/share/zoneinfo/
 
 create_socket_dir /jail/authsvc 60011:60011 755
-create_socket_dir /jail/banksvc 60012:60012 755
 create_socket_dir /jail/guarantorsvc 60013:60013 755
 create_socket_dir /jail/depositsvc 60017:60017 755
 
@@ -72,8 +71,6 @@ rm -rf /jail/zoobar/db
 
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-cred
-python /jail/zoobar/zoodb.py init-guarantor
-python /jail/zoobar/zoodb.py init-transfer
 python /jail/zoobar/zoodb.py init-bank
 
 python /jail/zoobar/deposit.py check_for_deposits
@@ -90,11 +87,6 @@ set_perms 61234:61111 777 /jail/zoobar/db/person/person.db
 set_perms 60011:60011 700 /jail/zoobar/db/cred/
 set_perms 60011:60011 700 /jail/zoobar/db/cred/cred.db
 
-set_perms 60012:60012 777 /jail/zoobar/db/transfer/
-set_perms 60012:60012 777 /jail/zoobar/db/transfer/transfer.db
 set_perms 60012:60012 700 /jail/zoobar/db/bank/
 set_perms 60012:60012 700 /jail/zoobar/db/bank/bank.db
-
-set_perms 60013:60013 700 /jail/zoobar/db/guarantor/
-set_perms 60013:60013 700 /jail/zoobar/db/guarantor/guarantor.db
 

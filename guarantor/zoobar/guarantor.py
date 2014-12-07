@@ -15,16 +15,16 @@ from jsonrpc import ServiceProxy
 import random
 
 def balance(username):
-  db = guarantor_setup()
-  account = db.query(Guarantor).get(username)
+  db = bank_setup()
+  account = db.query(Bank).get(username)
   return account.balance
 
 def check_balance(amount, user):
   return amount <= balance(user)
 
 def withdraw(amount, username):
-  db = guarantor_setup()
-  account = db.query(Guarantor).get(username)
+  db = bank_setup()
+  account = db.query(Bank).get(username)
   account.balance -= amount
   db.commit()
 
