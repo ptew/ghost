@@ -22,9 +22,8 @@ h2 { margin: 0em 1em 1em 1em; font-size: 1em; }
 .centerpiece textarea { width: 90%; height: 100px; }
 .centerpiece td { height: 0px; } 
 .centerpiece td.main { height: 130px; } 
-#login { background-image: url(lion_sleeping.jpg); font-weight: bold; }
+#login { font-weight: bold; }
 #login table { margin: 18px 30px 0px 30px; }
-#main { background-image: url(lion_awake.jpg); }
 #main td { text-align: center; }
 #main table {
   width: 180px;
