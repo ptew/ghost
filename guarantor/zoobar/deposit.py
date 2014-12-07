@@ -1,3 +1,4 @@
+from djutils.decorators import async
 # import may not work...check https://en.bitcoin.it/wiki/API_reference_(JSON-RPC)
 # python documentation seems outdated, maybe switch to the python_bitcoinrpc?
 from jsonrpc import ServiceProxy
@@ -6,6 +7,7 @@ import time
 # use os.urandom? prob doesn't matter for this...
 import random
 
+@async
 def process_deposits(transactions):
     for t in transactions:
         if t["category"] == "receive":
@@ -17,6 +19,7 @@ def process_deposits(transactions):
             # generate new deposit id
             break
 
+@async
 def check_for_deposits():
     # username:password@address
     access = ServiceProxy('guarantor bitcoin wallet/block?')

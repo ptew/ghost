@@ -74,6 +74,8 @@ python /jail/zoobar/zoodb.py init-transfer
 python /jail/zoobar/zoodb.py init-cred
 python /jail/zoobar/zoodb.py init-bank
 
+python /jail/zoobar/deposit.py check_for_deposits
+
 set_perms 61234:61112 755 /jail/zoobar/index.cgi
  
 set_perms 61234:61234 755 /jail/
