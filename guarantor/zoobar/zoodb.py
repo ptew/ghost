@@ -5,7 +5,7 @@ import os
 from debug import *
 
 PersonBase = declarative_base()
-TransferBase = declarative_base()
+WalletBase = declarative_base()
 CredBase = declarative_base()
 BankBase = declarative_base()
 
@@ -21,19 +21,17 @@ class Cred(CredBase):
     token = Column(String(128))
     salt = Column(String(128))
 
-class Transfer(TransferBase):
-    __tablename__ = "transfer"
-    id = Column(Integer, primary_key=True)
-    sender = Column(String(128))
-    recipient = Column(String(128))
-    amount = Column(Integer)
-    time = Column(String)
-
 class Bank(BankBase):
     __tablename__ = "bank"
     username = Column(String(128), primary_key=True)
-    deposit_id = Column(Integer)
-    zoobars = Column(Integer, nullable=False, default=10)
+    bank_id = Column(String(128))
+    bitcoin_balance = Column(Integer, nullable=False, default=10)
+
+class Wallet(WalletBase):
+    __tablename__ = "wallet"
+    wallet_address = Column(String(128), primary_key=True)
+    wallet_creds = Column(String(128))
+    bank_id = Column(String(128))
 
 def dbsetup(name, base):
     thisdir = os.path.dirname(os.path.abspath(__file__))
@@ -51,8 +49,8 @@ def dbsetup(name, base):
 def person_setup():
     return dbsetup("person", PersonBase)
 
-def transfer_setup():
-    return dbsetup("transfer", TransferBase)
+def wallet_setup():
+    return dbsetup("wallet", WalletBase)
 
 def cred_setup():
     return dbsetup("cred", CredBase)
@@ -63,14 +61,14 @@ def bank_setup():
 import sys
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print "Usage: %s [init-person|init-transfer|init-cred|init-bank]" % sys.argv[0]
+        print "Usage: %s [init-person|init-wallet|init-cred|init-bank]" % sys.argv[0]
         exit(1)
 
     cmd = sys.argv[1]
     if cmd == 'init-person':
         person_setup()
-    elif cmd == 'init-transfer':
-        transfer_setup()
+    elif cmd == 'init-wallet':
+        wallet_setup()
     elif cmd == 'init-cred':
         cred_setup()
     elif cmd == 'init-bank':
