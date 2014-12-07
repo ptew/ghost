@@ -32,7 +32,7 @@ class Transfer(TransferBase):
 class Bank(BankBase):
     __tablename__ = "bank"
     username = Column(String(128), primary_key=True)
-    deposit_id = Column(Integer)
+    deposit_id = Column(String)
     zoobars = Column(Integer, nullable=False, default=10)
 
 def dbsetup(name, base):
