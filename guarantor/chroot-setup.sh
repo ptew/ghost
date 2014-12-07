@@ -56,7 +56,6 @@ cp /etc/resolv.conf /jail/etc/
 mkdir -p /jail/usr/share/zoneinfo
 cp -r /usr/share/zoneinfo/America /jail/usr/share/zoneinfo/
 
-create_socket_dir /jail/echosvc 61010:61010 755
 create_socket_dir /jail/authsvc 60011:60011 755
 create_socket_dir /jail/banksvc 60012:60012 755
 
