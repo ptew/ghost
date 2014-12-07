@@ -45,8 +45,8 @@ def receive_check(check):
     ghost.make_transaction(decrypted['merchant_addr'], amount)
 
     # Post to bulletin via HTTP request
-    bulletin_url = 'https://bulletin.com'
-    params = {'bulletin_id': decrypted['bulletin_id'], 'transaction_id': decrypted['transaction_id']}
+    bulletin_url = decrypted['bulletin']
+    params = {'transaction_id': decrypted['transaction_id'], 'signed_receipt': '129ud'}
     req = url.Request(bulletin_url, urllib.urlencode(params))
     handler = url.urlopen(req)
 
@@ -64,7 +64,7 @@ def decrypt_check(check):
             'transaction_id': 123,
             'amount': 1,
             'merchant_addr': '12jdb9F',
-            'bulletin_id': '124JDKL',
+            'bulletin': 'https://bulletin.com',
             'timestamp': 123124}
   return False
 
