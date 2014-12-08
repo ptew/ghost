@@ -7,6 +7,7 @@ import os
 from debug import *
 
 PersonBase = declarative_base()
+WalletBase = declarative_base()
 CredBase = declarative_base()
 BankBase = declarative_base()
 
@@ -25,7 +26,14 @@ class Cred(CredBase):
 class Bank(BankBase):
     __tablename__ = "bank"
     username = Column(String(128), primary_key=True)
-    deposit_id = Column(Integer)
+    bank_id = Column(String(128))
+    bitcoin_balance = Column(Integer, nullable=False, default=10)
+
+class Wallet(WalletBase):
+    __tablename__ = "wallet"
+    wallet_address = Column(String(128), primary_key=True)
+    wallet_creds = Column(String(128))
+    bank_id = Column(String(128))
     balance = Column(Integer, nullable=False, default=0)
 
 def dbsetup(name, base):
@@ -44,6 +52,9 @@ def dbsetup(name, base):
 def person_setup():
     return dbsetup("person", PersonBase)
 
+def wallet_setup():
+    return dbsetup("wallet", WalletBase)
+
 def cred_setup():
     return dbsetup("cred", CredBase)
 
@@ -53,12 +64,14 @@ def bank_setup():
 import sys
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print "Usage: %s [init-person|init-transfer|init-cred|init-bank]" % sys.argv[0]
+        print "Usage: %s [init-person|init-wallet|init-cred|init-bank]" % sys.argv[0]
         exit(1)
 
     cmd = sys.argv[1]
     if cmd == 'init-person':
         person_setup()
+    elif cmd == 'init-wallet':
+        wallet_setup()
     elif cmd == 'init-cred':
         cred_setup()
     elif cmd == 'init-bank':
