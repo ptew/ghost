@@ -1,8 +1,8 @@
 import time
 
 from zoodb import *
-import ghost_bitcoin as bitcoin
-# import fake_bitcoin as bitcoin
+# import ghost_bitcoin as bitcoin
+import fake_bitcoin as bitcoin
 
 def check_for_deposits():
     # TODO: make sure that deposit service has bank access for updating user balances
