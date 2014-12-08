@@ -3,14 +3,14 @@ import random
 
 ADDRESSES = ['mkdbscrEwzz1TEP9uHUkY5yVtPPBj7Bemq2',
              'm24BdlawfalT3SLdj1ndlajfIIdan93pazt',
-             'mAPlua4s6lUsAh4bsaleiJLISv72Jslckaw']
+             'mAPlua4s6lUsAh4bsaleiJLISv72Jslckaw',
+             'm2398SLIEJFs9823SDHF3bsdfsj239Dh2f9',
+             'ma24KF3Hjsadlwp4HFsk2nakslieE22dja0']
 
 deposited = False
-count = 0
 
 def get_new_address():
-    count += 1
-    return ADDRESSES[count%3]
+    return random.choice(ADDRESSES)
 
 def getreceivedbyaddress(address):
     if deposited:
