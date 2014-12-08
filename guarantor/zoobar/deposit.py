@@ -39,7 +39,6 @@ def check_for_deposits():
                 # deposit address should be one-to-one mapping for user
                 user = bank_db.query(Bank).filter(Bank.bank_id == addr.bank_id)[0]
                 user.bitcoin_balance += amount
-                user.deposit_address = new_address
 
                 # commit changes to user
                 bank_db.commit()
