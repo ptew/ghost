@@ -1,0 +1,33 @@
+SETUP - ACCOUNT
+Create a login and password with the guarantor
+
+SETUP - DEPOSIT
+Over HTTPS, get randomized wallet address from guarantor
+Add Bitcoin value to it
+Verify that account balance credited
+
+
+TRANSACTION
+
+Using information received by merchant, namely:
+{
+        transaction id,
+        amount,
+        merchant BC address,
+        preferred bulletin
+}
+
+Create a check containing
+{
+	transaction_id: 	value
+	amount: 		value
+	merchant_address: 	value
+	bulletin:		value
+	timestamp:		value
+}
+and encrypt this with the checkbook. Send check to guarantor.
+
+Verify receipt on bulletin with lookup(transaction_id)
+Verify merchant account credited with the appropriate amount of money
+Verify balance with guarantor has decreased accordingly
+

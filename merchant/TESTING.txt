@@ -1,0 +1,16 @@
+TRANSACTION:
+Provide the following information to the customer:
+{
+        transaction id,
+        amount,
+        merchant BC address,
+        preferred bulletin
+}
+
+
+VERIFICATION:
+At the bulletin, use lookup(transaction_id) to determine the state of transaction
+Verify signature of guarantor
+
+
+
