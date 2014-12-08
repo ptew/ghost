@@ -6,9 +6,11 @@ ADDRESSES = ['mkdbscrEwzz1TEP9uHUkY5yVtPPBj7Bemq2',
              'mAPlua4s6lUsAh4bsaleiJLISv72Jslckaw']
 
 deposited = False
+count = 0
 
 def get_new_address():
-    return random.choice(ADDRESSES)
+    count += 1
+    return ADDRESSES[count%3]
 
 def getreceivedbyaddress(address):
     if deposited:
