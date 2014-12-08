@@ -6,10 +6,9 @@ from bitcoin import rpc, SelectParams
 # SelectParams('mainnet')
 SelectParams('testnet')
 
-def getnew():
+def get_new_address():
     proxy = rpc.Proxy()
-    newaddress = proxy.getnewaddress()
-    print(newaddress)
+    newaddress = str(proxy.getnewaddress())
     return newaddress
 
 def getreceivedbyaddress(address):
@@ -29,5 +28,7 @@ def get_balance():
     balance = proxy.getbalance()
     print("balance: " + str(balance))
     return float(balance)
-# get_balance()
+
+# print get_new_address()
+
 # send_bitcoins('mmHExc9mUChgAsqBVNZ1WVpFa2Do2r9gnR', get_balance()/4)
