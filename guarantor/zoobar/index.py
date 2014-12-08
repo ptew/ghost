@@ -1,7 +1,6 @@
 from flask import g, render_template, request
 from login import requirelogin
 from debug import *
-from zoodb import *
 
 import bank_client as bank
 
