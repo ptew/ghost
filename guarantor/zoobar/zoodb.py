@@ -62,14 +62,14 @@ def bank_setup():
 import sys
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print "Usage: %s [init-person|init-wallet|init-cred|init-bank]" % sys.argv[0]
+        print "Usage: %s [init-person|init-address|init-cred|init-bank]" % sys.argv[0]
         exit(1)
 
     cmd = sys.argv[1]
     if cmd == 'init-person':
         person_setup()
     elif cmd == 'init-address':
-        wallet_setup()
+        address_setup()
     elif cmd == 'init-cred':
         cred_setup()
     elif cmd == 'init-bank':
