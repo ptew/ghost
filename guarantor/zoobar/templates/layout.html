@@ -3,14 +3,13 @@
     <head>
         <link rel="stylesheet" type="text/css" href="/zoobar/media/guarantor.css">
         <title>
-          CheckBits
+          {% block title %}CheckBits{% endblock %}
         </title>
     </head>
     <body>
         {% if g.user and g.user.person %}
         {% set person = g.user.person %}
-        {% set person_zoobars = g.user.zoobars %}
-        {% set balance = g.user.bank.balance %}
+        {% set balance = g.user.balance %}
         <div id="header">
           <div><a href="{{ url_for('logout') }}">Log out {{ person.username }}</a></div>
         </div>
@@ -19,13 +18,7 @@
       <h2>A Guarantor System for Bitcoin</h2>
       {% block main %}
       <div id="main" class="centerpiece">
-        <table>
-          <tr><td class="main">
-            {% block content %}{% endblock %}
-          </td></tr>
-        </table>
+        {% block content %}{% endblock %}
       </div>
-      {% block postscript %}{% endblock %}
-      {% endblock %}
     </body>
 </html>

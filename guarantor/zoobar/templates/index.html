@@ -2,12 +2,7 @@
 {% block title %}Home Page{% endblock %}
 {% block content %}
 <b>Balance:</b> {{ balance if balance > 0 else 0 }} bitcoins<br />
-{% endblock %}
-{% block postscript %}
-<center>
-<b>Your profile:</b>
 <form method="POST" name="depositIDform">
     <input type="submit" name="req_new_ID" value="Request New Deposit ID" />
 </form>
-</center>
 {% endblock %}
