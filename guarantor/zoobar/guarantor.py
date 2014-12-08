@@ -4,7 +4,7 @@ from debug import *
 import time
 import urllib
 import urllib2 as url
-import ghost_blockchain as ghost
+import ghost_bitcoin as bitcoin
 
 from djutils.decorators import async
 # import may not work...check https://en.bitcoin.it/wiki/API_reference_(JSON-RPC)
@@ -13,6 +13,8 @@ from jsonrpc import ServiceProxy
 
 # use os.urandom? prob doesn't matter for this...
 import random
+
+SUCCESS_CODE = 200
 
 def balance(username):
   db = bank_setup()
@@ -38,11 +40,11 @@ def receive_check(check):
     # Update client's balance
     if check_balance(amount, user):
       withdraw(amount, user)
-    else
+    else: 
       raise ValueError('Not enough credit. Transaction failed.')
 
     # Make transaction from guarantor to merchant.
-    ghost.make_transaction(decrypted['merchant_addr'], amount)
+    bitcoin.send_bitcoins(decrypted['merchant_addr'], amount)
 
     # Post to bulletin via HTTP request
     bulletin_url = decrypted['bulletin']
@@ -51,7 +53,7 @@ def receive_check(check):
     handler = url.urlopen(req)
 
     # Check to see if bulletin posting was successful.
-    if handler.getcode() == 200:
+    if handler.getcode() == SUCCESS_CODE:
       return True
   return False
 

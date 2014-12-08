@@ -1,13 +1,9 @@
-# Using this library as suggested by Parker
-from bitcoin import rpc
 import time
 
 from zoodb import *
-import ghost_blockchain
+import ghost_bitcoin
 
 def check_for_deposits():
-    proxy = rpc.Proxy()
-    
     # TODO: make sure that deposit service has bank access for updating user balances
     bank_db = bank_setup()
     address_db = address_setup()
@@ -18,14 +14,14 @@ def check_for_deposits():
             
             # should assume that each of these one-time deposit addresses only has a single transaction
             # may need to specify minConf to something greater than 1 later for more insurance
-            amount = proxy.getreceivedbyaddress(addr.address)
+            amount = ghost_bitcoin.getreceivedbyaddress(addr)
 
             # note: we could use listreceivedbyaddress to get all transactions for all addresses to further
             # ensure that each address is used only once (or only one transaction is processed per address)
             
             if amount > 0:
                 # get new address and update address_db
-                new_address = proxy.getnewaddress()
+                new_address = proxy.getnew()
                 address = Address()
                 address.address = new_address
                 address.bank_id = addr.bank_id
