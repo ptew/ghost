@@ -1,58 +1,51 @@
-# import may not work...check https://en.bitcoin.it/wiki/API_reference_(JSON-RPC)
-# python documentation seems outdated, maybe switch to the python_bitcoinrpc?
-from jsonrpc import ServiceProxy
+# Using this library as suggested by Parker
+from bitcoin import rpc
 import time
 
 from zoodb import *
 import ghost_blockchain
 
 def check_for_deposits():
-    # username:password@address
-    access = ServiceProxy('guarantor bitcoin wallet/block?')
-    acct = 'specific bitcoin account?'
-    wallet_db = wallet_setup()
+    proxy = rpc.Proxy()
     
     # TODO: make sure that deposit service has bank access for updating user balances
     bank_db = bank_setup()
+    address_db = address_setup()
 
     while True:
-        wallets = wallet_db.query(Wallet).all()
-        for wallet in wallets:
-            # TODO: find some way to get transactions for the wallet
+        addresses = address_db.query(Address).all()
+        for addr in addresses:
             
-            # should assume that each of these one-time use wallets only has a single transaction
-            if (len(wallet.transactions) > 0):
-                transaction = wallet.transactions[0]
-                
-                # send bitcoins from temp wallet to guarantor wallet
-                # TODO: replace arguments with correct method calls or values
-                ghost_blockchain.send_bitcoins(wallet.identifier, wallet.wallet_creds, guarantor.address, transaction.amount) 
+            # should assume that each of these one-time deposit addresses only has a single transaction
+            # may need to specify minConf to something greater than 1 later for more insurance
+            amount = proxy.getreceivedbyaddress(addr.address)
 
+            # note: we could use listreceivedbyaddress to get all transactions for all addresses to further
+            # ensure that each address is used only once (or only one transaction is processed per address)
+            
+            if amount > 0:
+                # get new address and update address_db
+                new_address = proxy.getnewaddress()
+                address = Address()
+                address.address = new_address
+                address.bank_id = addr.bank_id
+                address_db.add(new_address)
+
+                # mark current address for deletion
+                # TODO: not sure if this is the right command, since delete only works on a query
+                address_db.delete(addr)
+                
                 # find user and update user balance
-                # wallet address should be one-to-one mapping for user
-                user = bank_db.query(Bank).filter(Bank.bank_id == wallet.bank_id)[0]
-                user.balance += transaction.amount
+                # deposit address should be one-to-one mapping for user
+                user = bank_db.query(Bank).filter(Bank.bank_id == addr.bank_id)[0]
+                user.bitcoin_balance += amount
+                user.deposit_address = new_address
 
                 # commit changes to user
                 bank_db.commit()
-
-                # get new wallet and update wallet_db
-                # TODO: update with correct password and api code
-                new_wallet_info = ghost_blockchain.create_wallet(some_password, some_api_code)
-                new_wallet = Wallet()
-                new_wallet.wallet_address = new_wallet_info.address
-                new_wallet.wallet_creds = some_password
-                new_wallet.bank_id = wallet.bank_id
-                wallet_db.add(new_wallet)
-
-                # doesn't the user need to know what one-time-use wallet to deposit to?
-
-                # remove current wallet from wallet_db
-                # TODO: not sure if this is the right command, since remove only works on a query
-                wallet.remove(False)
         
         # commit all changes after all wallets have been processed
-        wallet_db.commit()
+        address_db.commit()
  
         # current pause is 5 minutes
         time.sleep(300)

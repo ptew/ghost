@@ -7,7 +7,7 @@ import os
 from debug import *
 
 PersonBase = declarative_base()
-WalletBase = declarative_base()
+AddressBase = declarative_base()
 CredBase = declarative_base()
 BankBase = declarative_base()
 
@@ -28,12 +28,13 @@ class Bank(BankBase):
     username = Column(String(128), primary_key=True)
     bank_id = Column(String(128))
     bitcoin_balance = Column(Integer, nullable=False, default=10)
+    deposit_address = Column(String(128))
 
-class Wallet(WalletBase):
-    __tablename__ = "wallet"
-    wallet_address = Column(String(128), primary_key=True)
-    wallet_creds = Column(String(128))
+class Address(AddressBase):
+    __tablename__ = "address"
+    address = Column(String(128), primary_key=True)
     bank_id = Column(String(128))
+    # is this necessary?
     balance = Column(Integer, nullable=False, default=0)
 
 def dbsetup(name, base):
@@ -52,8 +53,8 @@ def dbsetup(name, base):
 def person_setup():
     return dbsetup("person", PersonBase)
 
-def wallet_setup():
-    return dbsetup("wallet", WalletBase)
+def address_setup():
+    return dbsetup("address", AddressBase)
 
 def cred_setup():
     return dbsetup("cred", CredBase)
@@ -70,7 +71,7 @@ if __name__ == "__main__":
     cmd = sys.argv[1]
     if cmd == 'init-person':
         person_setup()
-    elif cmd == 'init-wallet':
+    elif cmd == 'init-address':
         wallet_setup()
     elif cmd == 'init-cred':
         cred_setup()

@@ -71,7 +71,7 @@ cp -r zoobar /jail/
 rm -rf /jail/zoobar/db
 
 python /jail/zoobar/zoodb.py init-person
-python /jail/zoobar/zoodb.py init-wallet
+python /jail/zoobar/zoodb.py init-address
 python /jail/zoobar/zoodb.py init-cred
 python /jail/zoobar/zoodb.py init-bank
  
@@ -88,5 +88,5 @@ set_perms 60011:60011 700 /jail/zoobar/db/cred/cred.db
 set_perms 60012:60012 700 /jail/zoobar/db/bank/
 set_perms 60012:60012 700 /jail/zoobar/db/bank/bank.db
 
-set_perms 60017:60017 700 /jail/zoobar/db/wallet/
-set_perms 60017:60017 700 /jail/zoobar/db/wallet/wallet.db
+set_perms 60017:60017 700 /jail/zoobar/db/address/
+set_perms 60017:60017 700 /jail/zoobar/db/address/address.db
