@@ -1,5 +1,3 @@
-# TODO: remove Transfer and Bank databases
-
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import *
@@ -7,6 +5,7 @@ import os
 from debug import *
 
 PersonBase = declarative_base()
+AddressBase = declarative_base()
 CredBase = declarative_base()
 BankBase = declarative_base()
 
@@ -25,7 +24,14 @@ class Cred(CredBase):
 class Bank(BankBase):
     __tablename__ = "bank"
     username = Column(String(128), primary_key=True)
-    deposit_id = Column(Integer)
+    bank_id = Column(String(128))
+    bitcoin_balance = Column(Integer, nullable=False, default=10)
+
+class Address(AddressBase):
+    __tablename__ = "address"
+    address = Column(String(128), primary_key=True)
+    bank_id = Column(String(128))
+    # is this necessary?
     balance = Column(Integer, nullable=False, default=0)
 
 def dbsetup(name, base):
@@ -44,6 +50,9 @@ def dbsetup(name, base):
 def person_setup():
     return dbsetup("person", PersonBase)
 
+def address_setup():
+    return dbsetup("address", AddressBase)
+
 def cred_setup():
     return dbsetup("cred", CredBase)
 
@@ -53,12 +62,14 @@ def bank_setup():
 import sys
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print "Usage: %s [init-person|init-transfer|init-cred|init-bank]" % sys.argv[0]
+        print "Usage: %s [init-person|init-address|init-cred|init-bank]" % sys.argv[0]
         exit(1)
 
     cmd = sys.argv[1]
     if cmd == 'init-person':
         person_setup()
+    elif cmd == 'init-address':
+        address_setup()
     elif cmd == 'init-cred':
         cred_setup()
     elif cmd == 'init-bank':

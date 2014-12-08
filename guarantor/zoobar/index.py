@@ -16,7 +16,7 @@ def index():
         g.user.person.profile = person.profile
     
     # button or whatever to be added in index.html
-    if 'new_deposit_id' in request.form:
+    if 'req_new_ID' in request.form:
         # generate new deposit id and commit it to the relevant entry in bank.db
         pass
 
