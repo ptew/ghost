@@ -32,10 +32,10 @@ def register(username, password):
     salt = os.urandom(16).encode('base_64')
     newcred.password = pbkdf2.PBKDF2(password, salt).hexread(32)
     newcred.salt = salt
-    
-    bank.register(username)
     db.add(newcred)
     db.commit()
+
+    # TODO: register bank account to user
 
     newperson = Person()
     newperson.username = username

@@ -1,34 +1,50 @@
-# import may not work...check https://en.bitcoin.it/wiki/API_reference_(JSON-RPC)
-# python documentation seems outdated, maybe switch to the python_bitcoinrpc?
-from jsonrpc import ServiceProxy
+# Using this library as suggested by Parker
+from bitcoin import rpc
 import time
 
-# use os.urandom? prob doesn't matter for this...
-import random
-
-def process_deposits(transactions):
-    for t in transactions:
-        if t["category"] == "receive":
-            # extract user, deposit id, amount
-            ### have block and account, what to do? where is deposit id?
-            ### how to map deposit id to user?
-            # verify deposit id
-            # increase user balance by amount
-            # generate new deposit id
-            break
+from zoodb import *
+import ghost_blockchain
 
 def check_for_deposits():
-    # username:password@address
-    access = ServiceProxy('guarantor bitcoin wallet/block?')
-    acct = 'specific bitcoin account?'
-    current = 0
-    while True:
-        # will get up to count = 25 (by default) of the most recent transactions
-        new_transactions = access.listtransactions(account = acct, offset = current)["transactions"]
-        process_deposits(new_transactions)
+    proxy = rpc.Proxy()
+    
+    # TODO: make sure that deposit service has bank access for updating user balances
+    bank_db = bank_setup()
+    address_db = address_setup()
 
-        # update offset
-        current += len(new_transactions)
+    while True:
+        addresses = address_db.query(Address).all()
+        for addr in addresses:
+            
+            # should assume that each of these one-time deposit addresses only has a single transaction
+            # may need to specify minConf to something greater than 1 later for more insurance
+            amount = proxy.getreceivedbyaddress(addr.address)
+
+            # note: we could use listreceivedbyaddress to get all transactions for all addresses to further
+            # ensure that each address is used only once (or only one transaction is processed per address)
+            
+            if amount > 0:
+                # get new address and update address_db
+                new_address = proxy.getnewaddress()
+                address = Address()
+                address.address = new_address
+                address.bank_id = addr.bank_id
+                address_db.add(new_address)
+
+                # mark current address for deletion
+                # TODO: not sure if this is the right command, since delete only works on a query
+                address_db.delete(addr)
+                
+                # find user and update user balance
+                # deposit address should be one-to-one mapping for user
+                user = bank_db.query(Bank).filter(Bank.bank_id == addr.bank_id)[0]
+                user.bitcoin_balance += amount
+
+                # commit changes to user
+                bank_db.commit()
         
+        # commit all changes after all wallets have been processed
+        address_db.commit()
+ 
         # current pause is 5 minutes
         time.sleep(300)
