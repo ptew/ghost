@@ -1,15 +1,13 @@
 {% extends "layout.html" %}
-{% block title %}Balance{% endblock %}
+{% block title %}Home Page{% endblock %}
 {% block content %}
-<b>Balance:</b> {{ person_zoobars if person_zoobars > 0 else 0 }} zoobars<br />
+<b>Balance:</b> {{ balance if balance > 0 else 0 }} bitcoins<br />
 {% endblock %}
 {% block postscript %}
 <center>
 <b>Your profile:</b>
-<form method="POST" name="profileform">
-    <textarea name="profile_update" rows="20" cols="80">{{ person.profile }}</textarea>
-    <br />
-    <input type="submit" name="profile_submit" value="Save" />
+<form method="POST" name="depositIDform">
+    <input type="submit" name="req_new_ID" value="Request New Deposit ID" />
 </form>
 </center>
 {% endblock %}
