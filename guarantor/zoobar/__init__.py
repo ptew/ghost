@@ -4,6 +4,7 @@ from flask import Flask, g
 
 import login
 import index
+import transaction
 import zoodb
 from debug import catch_err
 
@@ -12,6 +13,7 @@ app = Flask(__name__)
 app.add_url_rule("/", "index", index.index, methods=['GET', 'POST'])
 app.add_url_rule("/login", "login", login.login, methods=['GET', 'POST'])
 app.add_url_rule("/logout", "logout", login.logout)
+app.add_url_rule("/transaction", "transaction", transaction.transaction, methods=['GET'])
 
 @app.after_request
 @catch_err

@@ -24,7 +24,7 @@ class Bank(BankBase):
     __tablename__ = "bank"
     username = Column(String(128), primary_key=True) 
     deposit_address = Column(String(128))
-    bitcoin_balance = Column(Integer, nullable=False, default=0)
+    bitcoin_balance = Column(Integer, nullable=False, default=10)
     client_key = Column(String(128))
 
 def dbsetup(name, base):

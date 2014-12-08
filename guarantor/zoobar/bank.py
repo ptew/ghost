@@ -39,7 +39,7 @@ def check_balance(amount, user):
 def withdraw(amount, username):
   db = bank_setup()
   account = db.query(Bank).get(username)
-  account.balance -= amount
+  account.bitcoin_balance -= amount
   db.commit()
 
 def register(username):
@@ -55,7 +55,7 @@ def register(username):
     db.commit()
 
 # Verifies that check is from valid user. Sends bitcoin transaction to merchant.
-def receive_check(check):
+def process_check(check):
   decrypted = decrypt_check(check)
   if decrypted:
     amount = decrypted['amount']
@@ -71,15 +71,15 @@ def receive_check(check):
     # bitcoin.send_bitcoins(decrypted['merchant_addr'], amount)
 
     # Post to bulletin via HTTP request
-    bulletin_url = decrypted['bulletin']
-    params = {'transaction_id': decrypted['transaction_id'], 'signed_receipt': '129ud'}
-    req = url.Request(bulletin_url, urllib.urlencode(params))
-    handler = url.urlopen(req)
+    # bulletin_url = decrypted['bulletin']
+    # params = {'transaction_id': decrypted['transaction_id'], 'signed_receipt': '129ud'}
+    # req = url.Request(bulletin_url, urllib.urlencode(params))
+    # handler = url.urlopen(req)
 
     # Check to see if bulletin posting was successful.
-    if handler.getcode() == SUCCESS_CODE:
-      return True
-  return False
+    # if handler.getcode() == SUCCESS_CODE:
+      # return True
+  return True
 
 # Calls library fn to check signature.
 # Decrypts check and returns original message in a dictionary.
@@ -90,7 +90,7 @@ def decrypt_check(check):
             'transaction_id': 123,
             'amount': 1,
             'merchant_addr': '12jdb9F',
-            'bulletin': 'https://bulletin.com',
+            'bulletin': 'http://google.com',
             'timestamp': 123124}
   return False
 
