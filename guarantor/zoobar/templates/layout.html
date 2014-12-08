@@ -9,8 +9,7 @@
     <body>
         {% if g.user and g.user.person %}
         {% set person = g.user.person %}
-        {% set person_zoobars = g.user.zoobars %}
-        {% set balance = g.user.bank.balance %}
+        {% set balance = g.user.balance %}
         <div id="header">
           <div><a href="{{ url_for('logout') }}">Log out {{ person.username }}</a></div>
         </div>

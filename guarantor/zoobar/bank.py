@@ -38,7 +38,7 @@ def transfer(sender, recipient, zoobars, token):
 def balance(username):
     db = bank_setup()
     account = db.query(Bank).get(username)
-    return account.zoobars
+    return account.bitcoin_balance
 
 def register(username):
     db = bank_setup()

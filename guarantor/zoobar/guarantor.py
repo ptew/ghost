@@ -17,7 +17,7 @@ import random
 def balance(username):
   db = bank_setup()
   account = db.query(Bank).get(username)
-  return account.balance
+  return account.bitcoin_balance
 
 def check_balance(amount, user):
   return amount <= balance(user)
