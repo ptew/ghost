@@ -5,8 +5,7 @@ import auth_client as auth
 # import ghost_bitcoin as bitcoin
 import fake_bitcoin as bitcoin
 import time
-import urllib
-import urllib2 as url
+import requests
 
 # VARIABLES
 SUCCESS_CODE = 200
@@ -59,6 +58,7 @@ def process_check(check):
   if decrypted:
     amount = decrypted['amount']
     user = decrypted['username']
+    transaction_id = decrypted['transaction_id']
 
     # Update client's balance
     if check_balance(amount, user):
@@ -67,18 +67,22 @@ def process_check(check):
       raise ValueError('Not enough credit. Transaction failed.')
 
     # Make transaction from guarantor to merchant.
-    # bitcoin.send_bitcoins(decrypted['merchant_addr'], amount)
+    bitcoin.send_bitcoins(decrypted['merchant_addr'], amount)
+    signed_receipt = make_receipt(transaction_id)
 
     # Post to bulletin via HTTP request
-    # bulletin_url = decrypted['bulletin']
-    # params = {'transaction_id': decrypted['transaction_id'], 'signed_receipt': '129ud'}
-    # req = url.Request(bulletin_url, urllib.urlencode(params))
-    # handler = url.urlopen(req)
+    bulletin_url = decrypted['bulletin']
+    params = {'transaction_id': transaction_id, 'signed_receipt': signed_receipt}
+    #r = requests.post(bulletin_url, data=params)
 
     # Check to see if bulletin posting was successful.
-    # if handler.getcode() == SUCCESS_CODE:
+    # if r.status_code == SUCCESS_CODE:
       # return True
   return True
+
+# TODO: actually sign receipt
+def make_receipt(transaction_id):
+    return 'encyrpted and signed!: ' + str(transaction_id) + str(time.time())
 
 # Calls library fn to check signature.
 # Decrypts check and returns original message in a dictionary.
