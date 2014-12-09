@@ -1,17 +1,21 @@
-from flask import g, render_template, request
-from login import requirelogin
+from flask import render_template, redirect, request, url_for
 from debug import *
-from zoodb import *
+
+import auth_client as bulletin
 
 @catch_err
-@requirelogin
 def index():
-    if 'profile_update' in request.form:
-        persondb = person_setup()
-        person = persondb.query(Person).get(g.user.person.username)
-        person.profile = request.form['profile_update']
-        persondb.commit()
+    return render_template('layout.html')
 
-        ## also update the cached version (see login.py)
-        g.user.person.profile = person.profile
-    return render_template('index.html')
+@catch_err
+def post():
+    transaction_id = request.args.get('transaction_id')
+    signed_receipt = request.args.get('signed_receipt')
+    resp = bulletin.post(transaction_id, signed_receipt)
+    return redirect(url_for('index')) 
+
+@catch_err
+def lookup():
+    transaction_id = request.args.get('transaction_id')
+    args['receipt'] = bulletin.lookup(transaction_id)
+    return render_template('index.html') 

@@ -11,7 +11,7 @@ BulletinBase = declarative_base()
 
 class Bulletin(BulletinBase):
     __tablename__ = "bulletin"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    # id = Column(Integer, primary_key=True, autoincrement=True)
     transaction_id = Column(String(128), primary_key=True)
     signed_receipt = Column(String(5000), default="")
     time = Column(String)
