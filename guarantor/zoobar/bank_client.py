@@ -12,6 +12,11 @@ def balance(username):
         keyword_args = {'username':username}
         return rpc_client.call('balance', **keyword_args)
 
+def new_address(username):
+    with rpclib.client_connect('/banksvc/sock') as rpc_client:
+        keyword_args = {'username':username}
+        return rpc_client.call('new_address', **keyword_args)
+
 def update_client_key(username, key):
     with rpclib.client_connect('/banksvc/sock') as rpc_client:
         keyword_args = {'username':username, 'key': key}
