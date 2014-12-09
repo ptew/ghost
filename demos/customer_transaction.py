@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import checkbits
+from checkbits import *
 import random
 
 #Need to change transaction id for every test
@@ -23,16 +23,27 @@ check['randomness'] = random.getrandbits(40)
 #TODO padding?
 
 #TODO set up working signing and decrypting keys
-signing_key = 1
-encrypting_key = 1
+signing_key = customer_private_key()
+encrypting_key = guarantor_public_key()
+
+print "SIGNING KEY"
+print signing_key
+
+print "ENCRYPTING KEY"
+print encrypting_key
+
 
 #Guarantor address
 guarantor_address = "54.69.86.196"
 
 
-echo check
-echo "Encrypting check"
-encrypted_check = checkbits.make_check(check, signing_key, encrypting_key)
+print check
+print "Encrypting check"
+encrypted_check = make_check(check, signing_key, encrypting_key)
+print encrypted_check
+
+print "TEST decryption"
+
 
 #TODO send encrypted_check to guarantor_address
 
