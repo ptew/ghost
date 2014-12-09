@@ -44,6 +44,7 @@ class User(object):
         self.person = persondb.query(Person).get(username)
         self.token = token
         self.balance = bank.balance(username)
+        self.client_key = bank.key(username)
 
 def logged_in():
     g.user = User()

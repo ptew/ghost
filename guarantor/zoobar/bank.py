@@ -11,10 +11,26 @@ import urllib2 as url
 # VARIABLES
 SUCCESS_CODE = 200
 
+def register(username):
+    db = bank_setup()
+    newaccount = Bank()
+    newaccount.username = username
+    db.add(newaccount)
+    db.commit()
+
 def balance(username):
     db = bank_setup()
     account = db.query(Bank).get(username)
     return account.bitcoin_balance
+
+def update_client_key(username, key):
+    db = bank_setup()
+    account = db.query(Bank).get(username)
+    account.client_key = key
+    db.commit()
+
+def current_address(username):
+    return "hello"
 
 def check_balance(amount, user):
   return amount <= balance(user)
@@ -24,13 +40,6 @@ def withdraw(amount, username):
   account = db.query(Bank).get(username)
   account.balance -= amount
   db.commit()
-
-def register(username):
-    db = bank_setup()
-    newaccount = Bank()
-    newaccount.username = username
-    db.add(newaccount)
-    db.commit()
 
 # Verifies that check is from valid user. Sends bitcoin transaction to merchant.
 def receive_check(check):

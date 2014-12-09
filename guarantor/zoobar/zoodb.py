@@ -26,6 +26,7 @@ class Bank(BankBase):
     username = Column(String(128), primary_key=True)
     bank_id = Column(String(128))
     bitcoin_balance = Column(Integer, nullable=False, default=10)
+    client_key = Column(String(128))
 
 class Address(AddressBase):
     __tablename__ = "address"
