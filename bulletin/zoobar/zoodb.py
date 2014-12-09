@@ -9,7 +9,7 @@ BulletinBase = declarative_base()
 #TODO Should we have store the subfields for easy access?
 # ex, field for transaction id, status, etc
 
-class Bulletin(PersonBase):
+class Bulletin(BulletinBase):
     __tablename__ = "bulletin"
     id = Column(Integer, primary_key=True, autoincrement=True)
     transaction_id = Column(String(128), primary_key=True)
