@@ -5,7 +5,6 @@ import os
 from debug import *
 
 PersonBase = declarative_base()
-AddressBase = declarative_base()
 CredBase = declarative_base()
 BankBase = declarative_base()
 
@@ -23,16 +22,10 @@ class Cred(CredBase):
 
 class Bank(BankBase):
     __tablename__ = "bank"
-    username = Column(String(128), primary_key=True)
-    bank_id = Column(String(128))
+    username = Column(String(128), primary_key=True) 
+    deposit_address = Column(String(128))
     bitcoin_balance = Column(Integer, nullable=False, default=10)
-
-class Address(AddressBase):
-    __tablename__ = "address"
-    address = Column(String(128), primary_key=True)
-    bank_id = Column(String(128))
-    # is this necessary?
-    balance = Column(Integer, nullable=False, default=0)
+    client_key = Column(String(128))
 
 def dbsetup(name, base):
     thisdir = os.path.dirname(os.path.abspath(__file__))
@@ -50,9 +43,6 @@ def dbsetup(name, base):
 def person_setup():
     return dbsetup("person", PersonBase)
 
-def address_setup():
-    return dbsetup("address", AddressBase)
-
 def cred_setup():
     return dbsetup("cred", CredBase)
 
@@ -68,8 +58,6 @@ if __name__ == "__main__":
     cmd = sys.argv[1]
     if cmd == 'init-person':
         person_setup()
-    elif cmd == 'init-address':
-        address_setup()
     elif cmd == 'init-cred':
         cred_setup()
     elif cmd == 'init-bank':

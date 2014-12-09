@@ -2,7 +2,10 @@
 {% block title %}Home Page{% endblock %}
 {% block content %}
 <b>Balance:</b> {{ balance if balance > 0 else 0 }} bitcoins<br />
-<form method="POST" name="depositIDform">
-    <input type="submit" name="req_new_ID" value="Request New Deposit ID" />
+<b>Current Address:</b> {{ address }}<br />
+<b>Current Client Key:</b> {{ key }}<br />
+<form method="POST" name="keyform">
+    New Client Key: <input type="text" name="client_key" />
+    <input type="submit" name="update_key" value="update">
 </form>
 {% endblock %}
