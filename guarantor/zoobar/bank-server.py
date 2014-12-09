@@ -10,6 +10,8 @@ class BankRpcServer(rpclib.RpcServer):
       return bank.register(username)
     def rpc_balance(self, username):
       return bank.balance(username)
+    def rpc_new_address(self, username):
+      return bank.new_address(username)
     def rpc_update_client_key(self, username, key):
       return bank.update_client_key(username, key)
     def rpc_display(self, username):
