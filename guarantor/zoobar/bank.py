@@ -29,6 +29,8 @@ def register(username):
     db = bank_setup()
     newaccount = Bank()
     newaccount.username = username
+    address = bitcoin.getnew()
+    newaccount.deposit_address = address
     db.add(newaccount)
     db.commit()
 

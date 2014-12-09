@@ -23,10 +23,12 @@ class Cred(CredBase):
 
 class Bank(BankBase):
     __tablename__ = "bank"
-    username = Column(String(128), primary_key=True)
-    bank_id = Column(String(128))
+    username = Column(String(128), primary_key=True) 
+    # bank_id = Column(String(128))
+    deposit_address = Column(String(128))
     bitcoin_balance = Column(Integer, nullable=False, default=10)
 
+# currently not in use
 class Address(AddressBase):
     __tablename__ = "address"
     address = Column(String(128), primary_key=True)
