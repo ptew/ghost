@@ -1,4 +1,6 @@
-import pycrypto
+from Crypto.Hash import MD5
+from Crypto.PublicKey import RSA
+from Crypto import Random
 
 # Default fields:
 # transaction_id
@@ -22,11 +24,17 @@ def make_check(args, signing_private_key, encrypting_public_key):
     return encrypted_check
     
 def sign_check(check, key):
-    return check
+    rng = Random.new().read
+    hash = MD5.new(plaintext).digest()
+    signature = key.sign(hash, rng)
 
 def encrypt_check(check, key):
-    return check
-    
+    rng = Random.new().read
+    encrypted = key.encrypt(check)
+    return encrypted
+   
+def verify_check():
+    pass 
 
 
 
