@@ -2,25 +2,38 @@ ASFLAGS := -m32
 CFLAGS  := -m32 -g -std=c99 -Wall -Werror -D_GNU_SOURCE
 LDFLAGS := -m32
 LDLIBS  := -lcrypto
-PROGS   := zookld zookfs zookd
+PROGS   := zookld zookd zookfs 
 
 all: $(PROGS)
 .PHONY: all
 
-zookld zookd zookfs: %: %.o http.o
+zookld: zookld.o http.o
+	cc $(LDFLAGS) zookld.o http.o $(LDLIBS) -o zookld
+zookd: zookd.o http.o
+	cc $(LDFLAGS) zookd.o http.o $(LDLIBS) -o zookd
+zookfs: zookfs.o http.o
+	cc $(LDFLAGS) zookfs.o http.o $(LDLIBS) -o zookfs
+	
+#	gcc zookld.o -o zookld
+#	gcc zookd.o -o zookd
+#	gcc zookfs.o -o zookfs
+#	gcc http.o -o httpd
 
+#zookld.o:
+#	gcc $(CFLAGS) -c zookld.c
 
-.PHONY: check
-check:
-	./check_lab2.py
-	./check_lab2_part4.py
+#zookd.o:
+#	gcc $(CFLAGS)-c zookd.c
 
+#zookfs.o:
+#	gcc $(CFLAGS)-c zookfs.c
 
+#http.o:
+#	gcc $(CFLAGS)-c http.c
+	
 .PHONY: setup
 setup:
 	./chroot-setup.sh
-
-
 
 .PHONY: fix-flask
 fix-flask: fix-flask.sh
@@ -30,29 +43,3 @@ fix-flask: fix-flask.sh
 clean:
 	rm -f *.o *.pyc *.bin $(PROGS)
 
-
-lab%-handin.tar.gz: clean
-	tar cf - `find . -type f | grep -v '^\.*$$' | grep -v '/CVS/' | grep -v '/\.svn/' | grep -v '/\.git/' | grep -v 'lab[0-9].*\.tar\.gz' | grep -v '/submit.token$$'` | gzip > $@
-
-.PHONY: prepare-submit
-prepare-submit: lab2-handin.tar.gz
-
-.PHONY: prepare-submit-a
-prepare-submit-a: lab2a-handin.tar.gz
-
-.PHONY: prepare-submit-b
-prepare-submit-b: lab2b-handin.tar.gz
-
-.PHONY: submit-a
-submit-a: lab2a-handin.tar.gz
-	./submit.py $<
-
-.PHONY: submit-b
-submit-b: lab2b-handin.tar.gz
-	./submit.py $<
-
-.PHONY: submit
-submit: lab2-handin.tar.gz
-	./submit.py $<
-
-.PRECIOUS: lab2-handin.tar.gz
