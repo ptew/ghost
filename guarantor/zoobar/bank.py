@@ -22,10 +22,10 @@ def update_client_key(username, key):
     account.client_key = key
     db.commit()
 
-def current_address(username):
+def display(username):
     db = bank_setup()
     account = db.query(Bank).get(username)
-    return account.deposit_address
+    return {'address': account.deposit_address, 'key': account.client_key}
 
 def check_balance(amount, user):
   return amount <= balance(user)

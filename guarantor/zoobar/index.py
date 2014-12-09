@@ -9,9 +9,9 @@ import bank_client as bank
 @requirelogin
 def index():
     username = g.user.person.username
-    address = bank.current_address(g.user.person.username)
+    display = bank.display(username)
 
     if 'client_key' in request.form:
         bank.update_client_key(username, request.form['client_key'])
 
-    return render_template('index.html', address=address)
+    return render_template('index.html', address=display['address'], key=display['key'])
