@@ -25,6 +25,7 @@ class Bank(BankBase):
     username = Column(String(128), primary_key=True) 
     deposit_address = Column(String(128))
     bitcoin_balance = Column(Integer, nullable=False, default=10)
+    client_key = Column(String(128))
 
 def dbsetup(name, base):
     thisdir = os.path.dirname(os.path.abspath(__file__))

@@ -16,6 +16,17 @@ def balance(username):
     account = db.query(Bank).get(username)
     return account.bitcoin_balance
 
+def update_client_key(username, key):
+    db = bank_setup()
+    account = db.query(Bank).get(username)
+    account.client_key = key
+    db.commit()
+
+def current_address(username):
+    db = bank_setup()
+    account = db.query(Bank).get(username)
+    return account.deposit_address
+
 def check_balance(amount, user):
   return amount <= balance(user)
 
