@@ -15,6 +15,12 @@ def balance(username):
     account = db.query(Bank).get(username)
     return account.bitcoin_balance
 
+def new_address(username):
+    db = bank_setup()
+    account = db.query(Bank).get(username)
+    account.deposit_address = bitcoin.getnew()
+    db.commit()
+
 def update_client_key(username, key):
     db = bank_setup()
     account = db.query(Bank).get(username)
