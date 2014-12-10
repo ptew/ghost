@@ -256,16 +256,17 @@ http_set_executable_uid_gid(int uid, int gid)
 static int
 valid_cgi_script(struct stat *st)
 {
+    // return 1;  
     if (!S_ISREG(st->st_mode))
         return 0;
 
     if (!(st->st_mode & S_IXUSR))
         return 0;
 
-    if (cgi_uid >= 0 && cgi_gid >= 0) {
-        if (st->st_uid != cgi_uid || st->st_gid != cgi_gid)
-            return 0;
-    }
+    // if (cgi_uid >= 0 && cgi_gid >= 0) {
+    //     if (st->st_uid != cgi_uid || st->st_gid != cgi_gid)
+    //         return 0;
+    // }
 
     return 1;
 }
@@ -286,6 +287,7 @@ void http_serve(int fd, const char *name)
 
     if (!stat(pn, &st))
     {
+        warnx("PN: %s", name );
         /* executable bits -- run as CGI script */
         if (valid_cgi_script(&st))
             handler = http_serve_executable;
@@ -307,6 +309,7 @@ void http_serve_file(int fd, const char *pn)
 {
     int filefd;
     off_t len = 0;
+    warnx("file");
 
     if (getenv("PATH_INFO")) {
         /* only attempt PATH_INFO on dynamic resources */
@@ -356,6 +359,7 @@ void http_serve_directory(int fd, const char *pn) {
     char name[1024];
     struct stat st;
     int i;
+    warnx("directory");
 
     for (i = 0; indices[i]; i++) {
         dir_join(name, sizeof(name), pn, indices[i]);
@@ -377,7 +381,7 @@ void http_serve_executable(int fd, const char *pn)
 {
     char buf[1024], headers[4096], *pheaders = headers;
     int pipefd[2], statusprinted = 0, ret, headerslen = 4096;
-
+    warnx("executable");
     pipe(pipefd);
     switch (fork()) {
     case -1:

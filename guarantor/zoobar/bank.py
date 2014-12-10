@@ -1,6 +1,5 @@
 from zoodb import *
 from debug import *
-from flask import g
 
 import auth_client as auth
 import ghost_bitcoin as bitcoin
@@ -77,7 +76,7 @@ def receive_check(check):
 def decrypt_check(check):
   isVerified = verify_signature(check)
   if isVerified:
-    return {'username': 'ghost'
+    return {'username': 'ghost',
             'transaction_id': 123,
             'amount': 1,
             'merchant_addr': '12jdb9F',
