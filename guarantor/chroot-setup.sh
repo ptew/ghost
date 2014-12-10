@@ -41,6 +41,7 @@ cp -p index.html /jail
 mkdir -p /jail/usr/lib /jail/usr/lib/i386-linux-gnu /jail/lib /jail/lib/i386-linux-gnu
 cp -r /usr/lib/python2.7 /jail/usr/lib
 cp /usr/lib/i386-linux-gnu/libsqlite3.so.0 /jail/usr/lib/i386-linux-gnu
+cp /usr/lib/i386-linux-gnu/libffi.so.6 /jail/usr/lib/i386-linux-gnu
 cp /lib/i386-linux-gnu/libnss_dns.so.2 /jail/lib/i386-linux-gnu
 cp /lib/i386-linux-gnu/libresolv.so.2 /jail/lib/i386-linux-gnu
 cp -r /lib/resolvconf /jail/lib
@@ -72,6 +73,8 @@ rm -rf /jail/zoobar/db
 python /jail/zoobar/zoodb.py init-person
 python /jail/zoobar/zoodb.py init-cred
 python /jail/zoobar/zoodb.py init-bank
+
+set_perms 61234:61112 700 /jail/zoobar/index.cgi
  
 set_perms 61234:61234 755 /jail/
 set_perms 61234:61010 755 /jail/zoobar/

@@ -23,6 +23,7 @@ def login(username, password):
         return None
 
 def register(username, password):
+    print "auth register"
     db = cred_setup()
     cred = db.query(Cred).get(username)
     if cred:
@@ -36,6 +37,7 @@ def register(username, password):
     db.commit()
 
     # TODO: register bank account to user
+    bank.register(username)
 
     newperson = Person()
     newperson.username = username

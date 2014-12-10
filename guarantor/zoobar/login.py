@@ -74,6 +74,7 @@ def login():
         password = request.form.get('login_password')
 
         if 'submit_registration' in request.form:
+            print "register"
             if not username:
                 login_error = "You must supply a username to register."
             elif not password:
@@ -83,6 +84,7 @@ def login():
                 if not cookie:
                     login_error = "Registration failed."
         elif 'submit_login' in request.form:
+            print "login"
             if not username:
                 login_error = "You must supply a username to log in."
             elif not password:

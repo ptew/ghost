@@ -2,7 +2,7 @@ from zoodb import *
 from debug import *
 
 import auth_client as auth
-import ghost_bitcoin as bitcoin
+# import ghost_bitcoin as bitcoin
 import time
 import urllib
 import urllib2 as url
@@ -13,12 +13,13 @@ SUCCESS_CODE = 200
 def balance(username):
     db = bank_setup()
     account = db.query(Bank).get(username)
+    print account
     return account.bitcoin_balance
 
 def new_address(username):
     db = bank_setup()
     account = db.query(Bank).get(username)
-    account.deposit_address = bitcoin.getnew()
+    # account.deposit_address = bitcoin.getnew()
     db.commit()
 
 def update_client_key(username, key):
@@ -42,11 +43,14 @@ def withdraw(amount, username):
   db.commit()
 
 def register(username):
+    print "REGISTERING: " + username
     db = bank_setup()
     newaccount = Bank()
     newaccount.username = username
-    address = bitcoin.getnew()
+    # address = bitcoin.getnew()
+    address = "TEST"
     newaccount.deposit_address = address
+    newaccount.balance = 0
     db.add(newaccount)
     db.commit()
 
@@ -64,7 +68,7 @@ def receive_check(check):
       raise ValueError('Not enough credit. Transaction failed.')
 
     # Make transaction from guarantor to merchant.
-    bitcoin.send_bitcoins(decrypted['merchant_addr'], amount)
+    # bitcoin.send_bitcoins(decrypted['merchant_addr'], amount)
 
     # Post to bulletin via HTTP request
     bulletin_url = decrypted['bulletin']
@@ -89,6 +93,11 @@ def decrypt_check(check):
             'bulletin': 'https://bulletin.com',
             'timestamp': 123124}
   return False
+
+def key(username):
+  db = bank_setup()
+  account = db.query(Bank).get(username)
+  return account.client_key
 
 # Stubbed out verification.
 def verify_signature(check):

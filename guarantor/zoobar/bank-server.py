@@ -18,8 +18,10 @@ class BankRpcServer(rpclib.RpcServer):
       return bank.display(username)
     def rpc_process_check(self, check):
       return bank.process_check(check)
+    def rpc_key(self, username):
+      return bank.key(username)
 
 (_, dummy_zookld_fd, sockpath) = sys.argv
 
-s = AuthRpcServer()
+s = BankRpcServer()
 s.run_sockpath_fork(sockpath)
