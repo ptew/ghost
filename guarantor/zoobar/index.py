@@ -14,7 +14,7 @@ def index():
         bank.update_client_key(username, request.form['client_key'])
 
     if 'new_address' in request.form:
-        bank.new_address(username, request.form['new_address'])
+        bank.new_address(username)
 
     display = bank.display(username)
 
