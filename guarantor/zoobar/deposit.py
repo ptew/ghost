@@ -1,7 +1,8 @@
 import time
 
 from zoodb import *
-import ghost_bitcoin
+import ghost_bitcoin as bitcoin
+# import fake_bitcoin as bitcoin
 
 def check_for_deposits():
     # TODO: make sure that deposit service has bank access for updating user balances
@@ -12,7 +13,7 @@ def check_for_deposits():
         for user in users:
             # should assume that each of these one-time deposit addresses only has a single transaction
             # may need to specify minConf to something greater than 1 later for more insurance
-            amount = ghost_bitcoin.getreceivedbyaddress(user.deposit_address)
+            amount = bitcoin.getreceivedbyaddress(user.deposit_address)
 
             # note: we could use listreceivedbyaddress to get all transactions for all addresses to further
             # ensure that each address is used only once (or only one transaction is processed per address)

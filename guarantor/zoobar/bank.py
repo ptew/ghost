@@ -2,7 +2,8 @@ from zoodb import *
 from debug import *
 
 import auth_client as auth
-import ghost_bitcoin as bitcoin
+# import ghost_bitcoin as bitcoin
+# import fake_bitcoin as bitcoin
 import time
 import urllib
 import urllib2 as url
