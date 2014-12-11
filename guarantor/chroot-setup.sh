@@ -40,6 +40,10 @@ cp -p index.html /jail
 
 mkdir -p /jail/usr/lib /jail/usr/lib/i386-linux-gnu /jail/lib /jail/lib/i386-linux-gnu
 cp -r /usr/lib/python2.7 /jail/usr/lib
+
+cp /usr/lib/i386-linux-gnu/libssl.so /jail/usr/lib/i386-linux-gnu 
+cp /lib/i386-linux-gnu/libssl.so.1.0.0 /jail/lib/i386-linux-gnu 
+cp /lib/i386-linux-gnu/libssl.so.1.0.0 /jail/usr/lib/i386-linux-gnu 
 cp /usr/lib/i386-linux-gnu/libsqlite3.so.0 /jail/usr/lib/i386-linux-gnu
 cp /usr/lib/i386-linux-gnu/libffi.so.6 /jail/usr/lib/i386-linux-gnu
 cp /lib/i386-linux-gnu/libnss_dns.so.2 /jail/lib/i386-linux-gnu
@@ -57,8 +61,12 @@ cp /etc/resolv.conf /jail/etc/
 mkdir -p /jail/usr/share/zoneinfo
 cp -r /usr/share/zoneinfo/America /jail/usr/share/zoneinfo/
 
+mkdir -p /jail/home/httpd/.bitcoin
+cp /home/httpd/.bitcoin/bitcoin.conf /jail/home/httpd/.bitcoin
+
 create_socket_dir /jail/authsvc 60011:60011 755
-create_socket_dir /jail/banksvc 60012:60012 755  
+# create_socket_dir /jail/banksvc 60012:60012 755  
+create_socket_dir /jail/banksvc 0:0 755  
 create_socket_dir /jail/depositsvc 60017:60017 755
 
 mkdir -p /jail/tmp

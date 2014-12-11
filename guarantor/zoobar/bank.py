@@ -2,7 +2,7 @@ from zoodb import *
 from debug import *
 
 import auth_client as auth
-# import ghost_bitcoin as bitcoin
+import ghost_bitcoin as bitcoin
 import time
 import urllib
 import urllib2 as url
@@ -19,7 +19,7 @@ def balance(username):
 def new_address(username):
     db = bank_setup()
     account = db.query(Bank).get(username)
-    # account.deposit_address = bitcoin.getnew()
+    account.deposit_address = bitcoin.get_new_address()
     db.commit()
 
 def update_client_key(username, key):
@@ -47,9 +47,7 @@ def register(username):
     db = bank_setup()
     newaccount = Bank()
     newaccount.username = username
-    # address = bitcoin.getnew()
-    address = "TEST"
-    newaccount.deposit_address = address
+    newaccount.deposit_address = bitcoin.get_new_address()
     newaccount.balance = 0
     db.add(newaccount)
     db.commit()
