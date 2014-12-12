@@ -7,6 +7,9 @@ import fake_bitcoin as bitcoin
 import time
 import requests
 
+from checkbits import *
+import json
+
 # VARIABLES
 SUCCESS_CODE = 200
 
@@ -55,6 +58,7 @@ def register(username):
 # Verifies that check is from valid user. Sends bitcoin transaction to merchant.
 def process_check(check):
   decrypted = decrypt_check(check)
+  decrypted = json.loads(decrypted)
   if decrypted:
     amount = decrypted['amount']
     user = decrypted['username']
@@ -85,15 +89,22 @@ def bulletin_post(bulletin_url, params):
     return True
   return False
 
-# TODO: actually sign receipt
 def make_receipt(transaction_id):
-    return 'encyrpted and signed!: ' + str(transaction_id) + str(time.time())
+    receipt = {}
+    receipt['valid'] = True
+    receipt['timestamp'] = str(time.time())
+    receipt['transaction_id'] = str(transaction_id)
+
+    return sign_check(receipt, MY_PRIVATE_KEY)
 
 # Calls library fn to check signature.
 # Decrypts check and returns original message in a dictionary.
 def decrypt_check(check):
   isVerified = verify_signature(check)
   if isVerified:
+    check = decrypt_check(check, MY_PRIVATE_KEY)
+    return check
+
     return {'username': 'ghost',
             'transaction_id': 123,
             'amount': 1,
@@ -109,4 +120,4 @@ def key(username):
 
 # Stubbed out verification.
 def verify_signature(check):
-  return True
+  return verify_check(check, CUSTOMER_PUBLIC_KEY)
