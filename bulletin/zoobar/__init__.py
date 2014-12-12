@@ -10,8 +10,8 @@ from debug import catch_err
 app = Flask(__name__)
 
 app.add_url_rule("/", "index", index.index, methods=['GET'])
-app.add_url_rule("/post", "post", index.post, methods=['GET', 'POST'])
-app.add_url_rule("/lookup", "lookup", index.lookup, methods=['GET', 'POST'])
+app.add_url_rule("/post", "post", view.post, methods=['GET', 'POST'])
+app.add_url_rule("/lookup", "lookup", view.lookup, methods=['GET', 'POST'])
 
 @app.after_request
 @catch_err

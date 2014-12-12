@@ -73,12 +73,14 @@ def process_check(check):
     # Post to bulletin via HTTP request
     bulletin_url = decrypted['bulletin']
     params = {'transaction_id': transaction_id, 'signed_receipt': signed_receipt}
-    #r = requests.post(bulletin_url, data=params)
+    r = requests.get(bulletin_url, params=params)
 
     # Check to see if bulletin posting was successful.
-    # if r.status_code == SUCCESS_CODE:
-      # return True
-  return True
+    if (r.status_code == SUCCESS_CODE) and (r.text == 'success!'):
+      return True
+    else:
+      raise ValueError('Failed to post to bulletin.')
+  return False
 
 # TODO: actually sign receipt
 def make_receipt(transaction_id):

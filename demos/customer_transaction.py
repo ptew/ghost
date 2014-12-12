@@ -2,7 +2,7 @@
 
 from checkbits import *
 import random
-import httplib
+import requests
 
 from setup_test_keys import *
 
@@ -44,6 +44,14 @@ decrypted_check = decrypt_check(encrypted_check, decrypting_key, versigning_key)
 print decrypted_check
 
 #Send check to Guarantor
+guarantor_url = "http://" + guarantor + ":8080/zoobar/index.cgi"
+transaction_url = guarantor_url + "/transaction?"
+check_params = {'check': encrypted_check}
+r1 = request.get(transaction_url, params=check_params)
+if r1.text != True:
+  print r1.text
+  raise ValueError('Transaction failed.')
+
 conn = httplib.HTTPConnection(guarantor)
 conn.request("GET", "/transaction?check=encrypted_check")
 r1 = conn.getresponse()
