@@ -68,29 +68,11 @@ if r1.text != True:
   print r1.text
   raise ValueError('Transaction failed.')
 
-conn = httplib.HTTPConnection(guarantor)
-conn.request("GET", "/transaction?check=encrypted_check")
-r1 = conn.getresponse()
-if r1.read() != 'success!':
-    raise ValueError('post did not return success')
-conn.close()
-
-
 #Check for receipt on Bulletin
 conn = httplib.HTTPConnection(bulletin)
-conn.request("GET", "/post?transaction_id=transaction_id&signed_receipt=signed_receipt")
-r1 = conn.getresponse()
-if r1.read() != 'success!':
-    raise ValueError('post did not return success')
-
-conn.request("GET", "/lookup?transaction_id=test1")
+conn.request("GET", "/lookup?transaction_id=transaction_id")
 r2 = conn.getresponse()
 print r2.read()
 
 conn.close()
-
-
-
-#TODO send encrypted_check to guarantor_address
-
 
