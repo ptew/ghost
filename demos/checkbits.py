@@ -44,7 +44,7 @@ def sign_check(check, customer):
 
 def decrypt_check(check, decrypting_key):
     try:
-        PlainText = ReadRSA.private_decrypt(check, M2Crypto.RSA.pkcs1_oaep_padding)
+        PlainText = decrypting_key.private_decrypt(check, M2Crypto.RSA.pkcs1_oaep_padding)
     except:
         print "Error: wrong key?"
 	PlainText = ""
