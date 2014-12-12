@@ -19,4 +19,5 @@ def post(transaction_id, signed_receipt):
 def lookup(transaction_id):
     db = bulletin_setup()
     # results = db.query(Bulletin).filter(Bulletin.transaction_id==transaction_id)
-    return 'signed_receipt'
+    bulletin = db.query(Bulletin).get(transaction_id)
+    return bulletin.signed_receipt

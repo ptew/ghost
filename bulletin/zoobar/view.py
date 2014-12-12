@@ -29,5 +29,5 @@ def post():
 @catch_err
 def lookup():
     transaction_id = request.args.get('transaction_id')
-    args['message'] = bulletin.lookup(transaction_id)
-    return render_template('index.html', **args) 
+    message = bulletin.lookup(transaction_id)
+    return render_template('index.html', message=message) 
