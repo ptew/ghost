@@ -8,7 +8,6 @@ import time
 import requests
 
 from checkbits import *
-import json
 
 # VARIABLES
 SUCCESS_CODE = 200
@@ -58,7 +57,6 @@ def register(username):
 # Verifies that check is from valid user. Sends bitcoin transaction to merchant.
 def process_check(check):
   decrypted = decrypt_check(check)
-  decrypted = json.loads(decrypted)
   if decrypted:
     amount = decrypted['amount']
     user = decrypted['username']

@@ -47,7 +47,7 @@ def decrypt_check(check, decrypting_key):
         print "Error: wrong key?"
 	PlainText = ""
     
-    return PlainText
+    return json.loads(PlainText)
 
     
 def verify_check(check, signature, ver_signing_key):
