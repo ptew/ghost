@@ -4,7 +4,7 @@ import M2Crypto
 def empty_callback ():
  return
 
-M2Crypto.Rand.rand_seed (os.urandom (1024))
+M2Crypto.Rand.rand_seed (os.urandom (2048))
 
 #If you don't like the default M2Crypto ASCII "progress" bar it makes when generating keys, you can use:
 # Alice = M2Crypto.RSA.gen_key (1024, 65537, empty_callback)
