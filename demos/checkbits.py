@@ -36,11 +36,9 @@ def sign_check(check, customer):
     MsgDigest = M2Crypto.EVP.MessageDigest ('sha1')
     MsgDigest.update(check)
 
-    Signature = customer.sign_rsassa_pss(MsgDigest.digest())
+    signature = customer.sign_rsassa_pss(MsgDigest.digest())
     print "Customer's signature for this message:"
-    sig = Signature.encode ('base64')    
-
-    return sig
+    return signature
 
 def decrypt_check(check, decrypting_key):
     try:
@@ -57,9 +55,9 @@ def verify_check(check, signature, ver_signing_key):
     MsgDigest = M2Crypto.EVP.MessageDigest ('sha1')
     MsgDigest.update(check)
 
-    if ver_signing_key.verify_rsassa_pss (MsgDigest.digest (), signature) == 1:
-        print "This message was sent by Alice.\n"
+    if ver_signing_key.verify_rsassa_pss (MsgDigest.digest(), signature) == 1:
+        return True
     else:
-        print "This message was NOT sent by Alice!\n"
+        return False
 
 

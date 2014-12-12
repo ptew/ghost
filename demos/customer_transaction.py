@@ -55,7 +55,7 @@ decrypted_check = decrypt_check(encrypted_check, decrypting_key)
 print decrypted_check
 
 print "\n\nTEST verification"
-verification = verify_check(encrypted_check, signature, ver_signing_key)
+verification = verify_check(decrypted_check, signature, ver_signing_key)
 print verification
 
 
