@@ -8,6 +8,7 @@ import time
 import requests
 
 from checkbits import *
+import M2Crypto
 
 # VARIABLES
 SUCCESS_CODE = 200
@@ -99,16 +100,9 @@ def make_receipt(transaction_id):
 # Decrypts check and returns original message in a dictionary.
 def decrypt_check(check):
   isVerified = verify_signature(check)
-  if isVerified:
-    check = decrypt_check(check, MY_PRIVATE_KEY)
-    return check
-
-    return {'username': 'ghost',
-            'transaction_id': 123,
-            'amount': 1,
-            'merchant_addr': '12jdb9F',
-            'bulletin': 'http://google.com',
-            'timestamp': 123124}
+  decrypted_check = decrypt_check(check, MY_PRIVATE_KEY)
+  if verify_signature(check):
+    return decrypted_check
   return False
 
 def key(username):
@@ -117,5 +111,5 @@ def key(username):
   return account.client_key
 
 # Stubbed out verification.
-def verify_signature(check):
-  return verify_check(check, CUSTOMER_PUBLIC_KEY)
+def verify_signature(check, username):
+  return verify_check(check, key(username))
