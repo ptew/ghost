@@ -9,6 +9,8 @@ from setup_test_keys import *
 import os
 import M2Crypto
 
+import json
+
 #Need to change transaction id for every test
 #merchant needs to check for the same transaction_id
 transaction_id = 123456789101112131415161718192021222324252627282930 
@@ -34,17 +36,28 @@ check['randomness'] = random.getrandbits(40)
 signing_key = M2Crypto.RSA.load_key ('Customer-private.pem')
 encrypting_key = M2Crypto.RSA.load_pub_key ('Guarantor-public.pem')
 
+check = json.dumps(check)
 print check
-print "Encrypting check"
-encrypted_check = make_check(check, signing_key, encrypting_key)
+
+print "\n\nTEST Encrypting check"
+encrypted_check = encrypt_check(check, encrypting_key)
 print encrypted_check
+
+print "\n\nTEST Signing check"
+signature = sign_check(check, signing_key)
+print signature
 
 ver_signing_key = M2Crypto.RSA.load_pub_key ('Customer-public.pem')
 decrypting_key = M2Crypto.RSA.load_key ('Guarantor-private.pem')
 
-print "TEST decryption"
-decrypted_check = decrypt_check(encrypted_check, decrypting_key, ver_signing_key)
+print "\n\nTEST Decryption"
+decrypted_check = decrypt_check(encrypted_check, decrypting_key)
 print decrypted_check
+
+print "\n\nTEST verification"
+verification = verify_check(encrypted_check, signature, ver_signing_key)
+print verification
+
 
 #Send check to Guarantor
 guarantor_url = "http://" + guarantor + ":8080/zoobar/index.cgi"
