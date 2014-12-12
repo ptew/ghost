@@ -1,4 +1,4 @@
-from flask import g, redirect, request, url_for
+from flask import g, request
 from login import requirelogin
 from debug import *
 
@@ -7,5 +7,9 @@ import bank_client as bank
 @requirelogin
 def transaction():
     if request.args.get('check'):   
-        bank.process_check(request.args.get('check'))
-    return redirect(url_for('index'))
+        status = bank.process_check(request.args.get('check'))
+        if status:
+          message = True
+        else:
+          message = False
+    return message

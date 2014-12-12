@@ -2,7 +2,7 @@
 
 from checkbits import *
 import random
-import httplib
+import requests
 
 #Need to change transaction id for every test
 #merchant needs to check for the same transaction_id
@@ -45,6 +45,14 @@ print encrypted_check
 print "TEST decryption"
 
 #Test Guarantor
+guarantor_url = "http://" + guarantor + ":8080/zoobar/index.cgi"
+transaction_url = guarantor_url + "/transaction?"
+check_params = {'check': encrypted_check}
+r1 = request.get(transaction_url, params=check_params)
+if r1.text != True:
+  print r1.text
+  raise ValueError('Transaction failed.')
+
 conn = httplib.HTTPConnection(guarantor)
 conn.request("GET", "/post?transaction_id=transaction_id&signed_receipt=signed_receipt")
 r1 = conn.getresponse()
