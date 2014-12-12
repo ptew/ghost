@@ -2,6 +2,7 @@
 
 from checkbits import *
 import random
+import httplib
 
 #Need to change transaction id for every test
 #merchant needs to check for the same transaction_id
@@ -12,7 +13,11 @@ amount = .00000001
 
 #Ada's Coinbase Account for Receiving
 merchant_address = "17tezGZcySJeDWsKYBsDubCEQZWM8YgnKT"
-bulletin = "54.68.222.230"
+
+#Guarantor address
+guarantor = "172.16.148.129"
+bulletin = "172.16.148.129"
+
 
 check = {}
 check['transaction_id'] = transaction_id
@@ -32,17 +37,40 @@ print signing_key
 print "ENCRYPTING KEY"
 print encrypting_key
 
-
-#Guarantor address
-guarantor_address = "54.69.86.196"
-
-
 print check
 print "Encrypting check"
 encrypted_check = make_check(check, signing_key, encrypting_key)
 print encrypted_check
 
 print "TEST decryption"
+
+#Test Guarantor
+conn = httplib.HTTPConnection(guarantor)
+conn.request("GET", "/post?transaction_id=transaction_id&signed_receipt=signed_receipt")
+r1 = conn.getresponse()
+if r1.read() != 'success!':
+    raise ValueError('post did not return success')
+
+conn.request("GET", "/lookup?transaction_id=transaction_id")
+r2 = conn.getresponse()
+print r2.read()
+
+conn.close()
+
+
+#Test Bulletin
+conn = httplib.HTTPConnection(bulletin)
+conn.request("GET", "/post?transaction_id=transaction_id&signed_receipt=signed_receipt")
+r1 = conn.getresponse()
+if r1.read() != 'success!':
+    raise ValueError('post did not return success')
+
+conn.request("GET", "/lookup?transaction_id=test1")
+r2 = conn.getresponse()
+print r2.read()
+
+conn.close()
+
 
 
 #TODO send encrypted_check to guarantor_address

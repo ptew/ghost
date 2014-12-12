@@ -13,8 +13,10 @@ amount = .00000001
 #Ada's Coinbase Account for Receiving
 merchant_address = "17tezGZcySJeDWsKYBsDubCEQZWM8YgnKT"
 
-bulletin = "54.68.222.230"
 
+bulletin = "172.16.148.129"
+
+#Test 1
 conn = httplib.HTTPConnection(bulletin)
 conn.request("GET", "/post?transaction_id=test1&signed_receipt=test2")
 r1 = conn.getresponse()
